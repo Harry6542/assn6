@@ -51,4 +51,22 @@ def update_state(grid_display, previous_grid):
                     new_row.append('-')
         new_grid_display.append(new_row)
     return new_grid_display
+def Conway(input_file, iterations=1, display=True):
+    currentState = initialRead_state(input_file)
+    previousState = [row.copy() for row in currentState]  # Keep a copy of the initial state
+
+    for _ in range(iterations):
+        currentState = update_state(currentState, previousState)
+        previousState = [row.copy() for row in currentState]  # Update the previous state for the next iteration
+        if display:
+            for row in currentState:
+                print(''.join(row))
+            print("=" * 20)  # separator for each iteration
+
+    n, m = len(currentState), len(currentState[0])
+    output_file = f"{input_file.rsplit('.', 1)[0]}_{iterations}steps.txt"
+    with open(output_file, 'w') as file:
+        for row in currentState:
+            file.write(''.join(row) + '\n')
+    print(f"The updated state has been saved to {output_file}.")
 
